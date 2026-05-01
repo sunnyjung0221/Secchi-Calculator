@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Secchi</title>
+
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Secchi">
+<link rel="apple-touch-icon" href="icon.svg">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#141415">
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif;
+  background: #141415;
+  min-height: 100vh;
+  min-height: -webkit-fill-available;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: env(safe-area-inset-top, 20px) 20px env(safe-area-inset-bottom, 34px);
+  padding-top: max(env(safe-area-inset-top), 52px);
+}
+
+.header {
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.reset-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #2c2c2e;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.15s;
+}
+.reset-btn:active { background: #3a3a3c; }
+.reset-btn svg { width: 16px; height: 16px; }
+
+.adj-btn {
+  width: 44px;
+  height: 50px;
+  border-radius: 12px;
+  background: #3a3a3c;
+  border: none;
+  color: #ffffff;
+  font-size: 22px;
+  font-weight: 300;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.1s;
+}
+.adj-btn:active { background: #48484a; }
+
+.header-text h1 {
+  font-size: 22px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: -0.5px;
+}
+
+.header-text p {
+  font-size: 13px;
+  color: #ffffff;
+  margin-top: 2px;
+}
+
+.card {
+  background: #232325;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 420px;
+  overflow: hidden;
+}
+
+.input-section {
+  padding: 18px 18px 14px;
+  border-bottom: 0.5px solid rgba(255,255,255,0.08);
+}
+
+.input-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: #8e8e93;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  margin-bottom: 10px;
+}
+
+.input-row {
+  display: flex;
+  align-items: center;
+  background: #3a3a3c;
+  border-radius: 12px;
+  padding: 0 14px;
+  gap: 8px;
+}
+
+input[type="number"] {
+  flex: 1;
+  height: 50px;
+  border: none;
+  background: transparent;
+  padding: 0;
+  font-size: 22px;
+  font-weight: 400;
+  color: #ffffff;
+  outline: none;
+  -webkit-appearance: none;
+  font-family: inherit;
+}
+
+input[type="number"]::placeholder { color: #c7c7cc; }
+
+.unit-text {
+  font-size: 17px;
+  color: #8e8e93;
+  font-weight: 400;
+}
+
+.kd-pill {
+  display: none;
+  margin-top: 10px;
+  background: #3a3a3c;
+  border-radius: 8px;
+  padding: 7px 12px;
+  font-size: 13px;
+  color: #8e8e93;
+}
+
+.kd-pill .val { color: #ebebf5; font-weight: 600; }
+
+.results { padding: 4px 0; }
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 13px 18px;
+  border-bottom: 0.5px solid rgba(255,255,255,0.07);
+}
+
+.row:last-child { border-bottom: none; }
+
+.row-left { display: flex; align-items: center; gap: 12px; }
+
+.dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+
+.row-label { font-size: 16px; color: #ebebf5; }
+
+.row-val {
+  font-size: 20px;
+  font-weight: 600;
+  color: #ffffff;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.3px;
+}
+
+.row-val .u { font-size: 14px; font-weight: 400; color: #8e8e93; margin-left: 1px; }
+.row-val .precise { font-size: 11px; font-weight: 400; color: #636366; margin-left: 3px; }
+
+.empty {
+  padding: 8px 18px;
+  text-align: center;
+  color: #636366;
+  font-size: 15px;
+}
+
+.footer {
+  width: 100%;
+  max-width: 420px;
+  margin-top: 14px;
+  text-align: center;
+  font-size: 12px;
+  color: #c7c7cc;
+  line-height: 1.7;
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-text">
+    <h1>Secchi Depth</h1>
+    <p>Light penetration calculator</p>
+  </div>
+  <button class="reset-btn" onclick="reset()" title="Reset">
+    <svg viewBox="0 0 24 24" fill="none" stroke="#8e8e93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+      <path d="M3 3v5h5"/>
+    </svg>
+  </button>
+</div>
+
+<div class="card">
+  <div class="input-section">
+    <div class="input-label">Secchi depth</div>
+    <div style="display:flex; align-items:center; gap:10px;">
+      <div class="input-row" style="flex:1;">
+        <input type="number" id="secchi" placeholder="0"
+               min="0" step="0.1" inputmode="decimal" oninput="sanitize()" onchange="sanitize()">
+        <span class="unit-text">m</span>
+      </div>
+      <button class="adj-btn" onclick="adjust(-1)">−</button>
+      <button class="adj-btn" onclick="adjust(1)">+</button>
+    </div>
+    <div class="kd-pill" id="kd-pill">
+      Kd = 1.7 / Z<sub>SD</sub> = <span class="val" id="kd-val"></span> m⁻¹
+    </div>
+  </div>
+
+  <div class="results" id="results">
+    <div class="empty">Enter depth</div>
+  </div>
+</div>
+
+<div class="footer">
+  Kd = 1.7 / Z<sub>SD</sub> &nbsp;·&nbsp; d = −ln(E/E₀) / Kd
+</div>
+
+<script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('./sw.js');
+}
+
+const LEVELS = [
+  { pct:"100%", trans:1.00, color:"#4a90d9" },
+  { pct:"50%",  trans:0.50, color:"#30b050" },
+  { pct:"30%",  trans:0.30, color:"#f0a030" },
+  { pct:"12%",  trans:0.12, color:"#e06040" },
+  { pct:"5%",   trans:0.05, color:"#bf5af2" },
+  { pct:"1%",   trans:0.01, color:"#ff3b30" },
+];
+
+function sanitize() {
+  const el = document.getElementById("secchi");
+  let v = el.value.replace(/[^0-9.]/g, "");
+  const parts = v.split(".");
+  if (parts.length > 2) v = parts[0] + "." + parts.slice(1).join("");
+  if (parts[1] && parts[1].length > 1) v = parts[0] + "." + parts[1].slice(0, 1);
+  if (parseFloat(v) < 0) v = "0";
+  if (v !== el.value) el.value = v;
+  calc();
+}
+
+function adjust(delta) {
+  const el = document.getElementById("secchi");
+  const cur = parseFloat(el.value) || 0;
+  const next = Math.max(0, Math.round(cur) + delta);
+  el.value = next;
+  calc();
+}
+
+function reset() {
+  document.getElementById("secchi").value = "";
+  document.getElementById("kd-pill").style.display = "none";
+  document.getElementById("results").innerHTML = '<div class="empty">Enter depth</div>';
+}
+
+function calc() {
+  const z = parseFloat(document.getElementById("secchi").value);
+  const pill = document.getElementById("kd-pill");
+  const res  = document.getElementById("results");
+
+  if (!z || z <= 0) {
+    pill.style.display = "none";
+    res.innerHTML = '<div class="empty">Enter depth</div>';
+    return;
+  }
+
+  const kd = 1.7 / z;
+  pill.style.display = "block";
+  document.getElementById("kd-val").textContent = kd.toFixed(4);
+
+  res.innerHTML = LEVELS.map(lv => {
+    const d = lv.trans === 1 ? 0 : -Math.log(lv.trans) / kd;
+    const rounded = Math.round(d);
+    const precise = d.toFixed(2);
+    const valHTML = `<span class="row-val">${rounded}<span class="u"> m</span><span class="precise"> (${precise})</span></span>`;
+
+    return `<div class="row">
+      <div class="row-left">
+        <div class="dot" style="background:${lv.color}"></div>
+        <div class="row-label">${lv.pct} light</div>
+      </div>
+      ${valHTML}
+    </div>`;
+  }).join("");
+}
+</script>
+</body>
+</html>

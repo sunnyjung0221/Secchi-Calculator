@@ -1,0 +1,10 @@
+<svg viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg">
+<style>
+.bg{fill:#ffffff}
+.fg{fill:#000000}
+@media(prefers-color-scheme:dark){.bg{fill:#000000}.fg{fill:#ffffff}}
+</style>
+<defs><clipPath id="c"><circle cx="300" cy="300" r="286"/></clipPath></defs>
+<circle class="bg" cx="300" cy="300" r="286"/>
+<path class="fg" d="M0 300L600 300L600 0L300 0L300 600L0 600z" clip-path="url(#c)"/>
+</svg>
