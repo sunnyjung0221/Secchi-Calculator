@@ -27,6 +27,12 @@ body {
   padding-top: max(env(safe-area-inset-top), 52px);
 }
 
+@media (display-mode: standalone) {
+  body {
+    padding-top: max(env(safe-area-inset-top, 44px) + 24px, 72px);
+  }
+}
+
 .header {
   width: 100%;
   max-width: 420px;
