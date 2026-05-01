@@ -69,9 +69,8 @@ body {
   justify-content: center;
   flex-shrink: 0;
   -webkit-tap-highlight-color: transparent;
-  transition: background 0.1s;
 }
-.adj-btn:active { background: #48484a; }
+.adj-btn:active { background: #636366; }
 
 .header-text h1 {
   font-size: 22px;
@@ -91,12 +90,12 @@ body {
   border-radius: 16px;
   width: 100%;
   max-width: 420px;
-  overflow: hidden;
 }
 
 .input-section {
   padding: 18px 18px 14px;
   border-bottom: 0.5px solid rgba(255,255,255,0.08);
+  border-radius: 16px 16px 0 0;
 }
 
 .input-label {
@@ -116,6 +115,10 @@ body {
   padding: 0 14px;
   gap: 8px;
 }
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+input[type="number"] { -moz-appearance: textfield; }
 
 input[type="number"] {
   flex: 1;
@@ -151,7 +154,9 @@ input[type="number"]::placeholder { color: #c7c7cc; }
 
 .kd-pill .val { color: #ebebf5; font-weight: 600; }
 
-.results { padding: 4px 0; }
+.results { padding: 4px 0; border-radius: 0 0 16px 16px; overflow: hidden; }
+
+.results .row:last-child { border-bottom: none; }
 
 .row {
   display: flex;
@@ -216,8 +221,8 @@ input[type="number"]::placeholder { color: #c7c7cc; }
 <div class="card">
   <div class="input-section">
     <div class="input-label">Secchi depth</div>
-    <div style="display:flex; align-items:center; gap:10px;">
-      <div class="input-row" style="flex:1;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <div class="input-row" style="flex:1;min-width:0;">
         <input type="number" id="secchi" placeholder="0"
                min="0" step="0.1" inputmode="decimal" oninput="sanitize()" onchange="sanitize()">
         <span class="unit-text">m</span>
