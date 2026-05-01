@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
 <title>Secchi</title>
 
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -69,6 +69,7 @@ body {
   justify-content: center;
   flex-shrink: 0;
   -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 .adj-btn:active { background: #636366; }
 
@@ -114,6 +115,7 @@ body {
   border-radius: 12px;
   padding: 0 14px;
   gap: 8px;
+  overflow: hidden;
 }
 
 input[type="number"]::-webkit-inner-spin-button,
@@ -122,6 +124,7 @@ input[type="number"] { -moz-appearance: textfield; }
 
 input[type="number"] {
   flex: 1;
+  min-width: 0;
   height: 50px;
   border: none;
   background: transparent;
