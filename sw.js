@@ -2,7 +2,8 @@ const CACHE = "secchi-v1";
 const ASSETS = [
   "./index.html",
   "./manifest.json",
-  "./icon.svg"
+  "./icon.svg",
+  "./apple-touch-icon.png"
 ];
 
 self.addEventListener("install", e => {
